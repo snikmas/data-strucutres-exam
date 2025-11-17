@@ -1,0 +1,6 @@
+1. define a structure/class for a bin tree
+struct Node{
+  Node *left;
+  Node *right;
+  int data;
+};
