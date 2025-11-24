@@ -4,9 +4,6 @@
 #define MAXSIZE 1000
 #define OK      1
 #define ERROR   0
-#define OK 1
-#define ERROR 0
-typedef int Status;
 typedef int Status;
 typedef int ElemType;
 
@@ -29,7 +26,7 @@ Status DestroyList(SqList *L) {
 
 // 3. 清空
 Status ClearList(SqList *L) {
-    L->length = 0;
+    L->length = 0; // static list cannot be freed
     return OK;
 }
 

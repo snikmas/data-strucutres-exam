@@ -4,7 +4,7 @@ typedef struct {
     int rear;       // 尾指针，指向队尾元素的下一个位置
 } SqQueue;
 
-// 1. 初始化队列
+// 1. 初始化队列 OK
 Status InitQueue(SqQueue *Q) {
     Q->front = 0;
     Q->rear = 0;

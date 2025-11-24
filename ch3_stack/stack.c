@@ -34,7 +34,7 @@ Status Push(SqStack *S, ElemType e) {
     return OK;
 }
 
-// 4. 出栈
+// 4. 出栈 OK
 Status Pop(SqStack *S, ElemType *e) {
     if (S->top == -1) return ERROR;           // 栈空
     *e = S->data[S->top];

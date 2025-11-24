@@ -3,13 +3,13 @@ typedef struct StackNode {
     struct StackNode *next;
 } StackNode, *LinkStack;
 
-// 初始化
+// 初始化 OK
 Status InitStack(LinkStack *S) {
     *S = NULL;
     return OK;
 }
 
-// 入栈（头插法）
+// 入栈（头插法）OK
 Status Push(LinkStack *S, ElemType e) {
     StackNode *p = (StackNode*)malloc(sizeof(StackNode));
     p->data = e;

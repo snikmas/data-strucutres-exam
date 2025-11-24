@@ -8,14 +8,14 @@ typedef struct {
     QNode *rear;    // 队尾指针
 } LinkQueue;
 
-// 初始化（带头结点）
+// 初始化（带头结点） OK
 Status InitQueue(LinkQueue *Q) {
     Q->front = Q->rear = (QNode*)malloc(sizeof(QNode));
     Q->front->next = NULL;
     return OK;
 }
 
-// 入队
+// 入队 OK
 Status EnQueue(LinkQueue *Q, ElemType e) {
     QNode *p = (QNode*)malloc(sizeof(QNode));
     p->data = e;  p->next = NULL;
