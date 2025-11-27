@@ -1,130 +1,91 @@
-typedef char ElemType;
+// 4. trees
 
+// 1. 二叉树
 typedef struct BiTNode {
     ElemType data;
     struct BiTNode *lchild, *rchild;
 } BiTNode, *BiTree;
 
-// 前序 / 中序 / 后序 遍历（递归）——考试必背三函数
-void PreOrder(BiTree T) {
-    if (T) {
-        visit(T->data);
-        PreOrder(T->lchild);
-        PreOrder(T->rchild);
-    }
-}
+// Основные операции, которые ОБЯЗАТЕЛЬНО спрашивают:
+Status InitBiTree(BiTree *T);                    // 初始化
+Status DestroyBiTree(BiTree *T);                 // 销毁
+Status CreateBiTree(BiTree *T);                  // 按前序建树（输入格式: ABD##E#C##）
+Status ClearBiTree(BiTree *T);                   // 清空
+Status BiTreeEmpty(BiTree T);                    // 判空
+int BiTreeDepth(BiTree T);                       // 求深度（高度）
+BiTNode *Root(BiTree T);                         // 返回根结点
+ElemType Value(BiTNode *p);                      // 返回结点值
+Status Assign(BiTNode *p, ElemType value);       // 给结点赋值
+BiTNode *Parent(BiTree T, ElemType e);           // 找双亲
+BiTNode *LeftChild(BiTree T, ElemType e);        // 左孩子
+BiTNode *RightChild(BiTree T, ElemType e);       // 右孩子
+BiTNode *LeftSibling(BiTree T, ElemType e);      // 左兄弟
+BiTNode *RightSibling(BiTree T, ElemType e);     // 右兄弟
+Status InsertChild(BiTree p, int LR, BiTree c);  // 插入子树（LR=0左，1右）
+Status DeleteChild(BiTree p, int LR);            // 删除左/右子树
 
-void InOrder(BiTree T) {
-    if (T) {
-        InOrder(T->lchild);
-        visit(T->data);
-        InOrder(T->rchild);
-    }
-}
-
-void PostOrder(BiTree T) {
-    if (T) {
-        PostOrder(T->lchild);
-        PostOrder(T->rchild);
-        visit(T->data);
-    }
-}
-
-// 层序遍历（需要队列）——考试 90% 出现
-void LevelOrder(BiTree T) {
-    SqQueue Q; InitQueue(&Q);
-    BiTree p;
-
-    if (T) EnQueue(&Q, T);
-
-    while (!QueueEmpty(Q)) {
-        DeQueue(&Q, &p);
-        visit(p->data);
-        if (p->lchild) EnQueue(&Q, p->lchild);
-        if (p->rchild) EnQueue(&Q, p->rchild);
-    }
-}
-
-// 二叉树创建（根据前序+空节点）——考试超高频
-// 输入： A B # # C D # # E # #
-void CreateBiTree(BiTree *T) {
-    char ch;
-    scanf(" %c", &ch);
-
-    if (ch == '#') *T = NULL;
-    else {
-        *T = (BiTree)malloc(sizeof(BiTNode));
-        (*T)->data = ch;
-        CreateBiTree(&((*T)->lchild));
-        CreateBiTree(&((*T)->rchild));
-    }
-}
-
-// 求二叉树深度（高度）——100% 考试题
-int TreeDepth(BiTree T) {
-    if (!T) return 0;
-    int l = TreeDepth(T->lchild);
-    int r = TreeDepth(T->rchild);
-    return (l > r ? l : r) + 1;
-}
-
-// 统计节点数 / 叶子数
-// 总结点数
-int CountNodes(BiTree T) {
-    if (!T) return 0;
-    return CountNodes(T->lchild) + CountNodes(T->rchild) + 1;
-}
-
-// 叶子节点数
-int CountLeaves(BiTree T) {
-    if (!T) return 0;
-    if (!T->lchild && !T->rchild) return 1;
-    return CountLeaves(T->lchild) + CountLeaves(T->rchild);
-}
-
-// 7. 求第j层节点数
-int CountLevelK(BiTree T, int k) {
-    if (!T) return 0;
-    if (k == 1) return 1;
-    return CountLevelK(T->lchild, k-1) + CountLevelK(T->rchild, k-1);
-}
-
-// 根据前序 + 中序构建二叉树
-BiTree Build(char *pre, char *in, int n) {
-    if (n <= 0) return NULL;
-
-    BiTree T = (BiTree)malloc(sizeof(BiTNode));
-    T->data = pre[0];
-
-    int k = 0;
-    while (in[k] != pre[0]) k++;
-
-    T->lchild = Build(pre+1, in, k);
-    T->rchild = Build(pre+k+1, in+k+1, n-k-1);
-
-    return T;
-}
-
-// 9. 二叉树拷贝
-BiTree Copy(BiTree T) {
-    if (!T) return NULL;
-    BiTree p = (BiTree)malloc(sizeof(BiTNode));
-    p->data = T->data;
-    p->lchild = Copy(T->lchild);
-    p->rchild = Copy(T->rchild);
-    return p;
-}
-
-// 10. 判断是否同构 (Isomorphic)
-int Isomorphic(BiTree T1, BiTree T2) {
-    if (!T1 && !T2) return 1;
-    if (!T1 || !T2) return 0;
-    if (T1->data != T2->data) return 0;
-
-    return (Isomorphic(T1->lchild, T2->lchild) &&
-            Isomorphic(T1->rchild, T2->rchild)) ||
-           (Isomorphic(T1->lchild, T2->rchild) &&
-            Isomorphic(T1->rchild, T2->lchild));
-}
+// Три обхода — 100% будут на экзамене:
+void PreOrderTraverse(BiTree T, void (*visit)(ElemType));
+void InOrderTraverse(BiTree T, void (*visit)(ElemType));
+void PostOrderTraverse(BiTree T, void (*visit)(ElemType));
+void LevelOrderTraverse(BiTree T, void (*visit)(ElemType));  // 层序
 
 
+
+// 2. 线索二叉树
+typedef enum {Link, Thread} PointerTag;   // Link=0指针, Thread=1线索
+
+typedef struct BiThrNode {
+    ElemType data;
+    struct BiThrNode *lchild, *rchild;
+    PointerTag ltag, rtag;
+} BiThrNode, *BiThrTree;
+
+// Самые частые функции:
+Status InOrderThreading(BiThrTree *Thrt, BiTree T);  // 中序线索化（最经典）
+void InOrderTraverse_Thr(BiThrTree T, void (*visit)(ElemType)); // 用线索遍历
+
+// 3. 树（普通树)
+#define MAX_TREE_SIZE 100
+typedef struct PTNode {
+    ElemType data;
+    int parent;                 // 父结点位置（-1表示根）
+} PTNode;
+
+typedef struct {
+    PTNode nodes[MAX_TREE_SIZE];
+    int r;      // 根的位置
+    int n;      // 结点数
+} PTree;
+
+// Часто просят:
+int Parent(PTree T, int i);
+int LeftChild(PTree T, int i);
+int RightSibling(PTree T, int i);
+
+// 4. 二叉搜索树
+Status SearchBST(BiTree T, ElemType key, BiTree f, BiTree *p);
+Status InsertBST(BiTree *T, ElemType e);
+Status DeleteBST(BiTree *T, ElemType key);
+
+
+// 5. 平衡二叉树
+// В узле добавляются:
+int bf;                     // balance factor
+BiTree avl_insert(BiTree T, ElemType e, int *taller);
+void R_Rotate(BiTree *p);
+void L_Rotate(BiTree *p);
+void LeftBalance(BiTree *T);
+void RightBalance(BiTree *T);
+
+// 6. 哈夫曼树 Huffman Tree
+
+typedef struct {
+    int weight;
+    int parent, lchild, rchild;
+} HTNode, *HuffmanTree;
+
+typedef char **HuffmanCode;
+
+void HuffmanCoding(HuffmanTree *HT, HuffmanCode *HC, int *w, int n);
+void Select(HuffmanTree HT, int n, int *s1, int *s2);   // 选两个最小的

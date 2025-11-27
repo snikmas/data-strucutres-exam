@@ -1,0 +1,49 @@
+These:  Heap String (DYNAMIC), heap(malloc)
+        KMP String (DYNAMIC), heap + kmp table
+        Naive String, array inside struct
+        Static Seq String, static array
+- are different implementations of string ADTs used in data-structures courses
+
+
+
+Characteristics:
+1) HeapString (堆分配串 / 动态串)
+  - the characters are stored in heap memory 动态的(malloc / realloc)
+  - length is dynamic - can grow/shrink
+  - good for large strings
+
+===========================================
+2) KMP
+  - a string representation tailored for KMP algorithm, including a next array
+  - the structure may store: 
+    - the string
+    - its length
+    - the kmp next / nextvar arary
+
+typedef struct {
+  char *ch;
+  int length;
+  int *next;
+} kmpString;
+
+============================================
+
+3) naive String (朴素顺序串 / 数数组实现), the simplest:
+  - implemented using a statuc array inside a struct
+  - not allocated dynamically 
+  - fixed maximum capacity
+  - simple but cannot grow
+
+typedef struct {
+    char ch[MAXLEN];
+    int length;
+} naiveStringA;
+
+============================================
+
+4) statucSeqString (静态顺序串), similar to naiveString, but more standardized in textbooks
+
+  - static/global array
+  - fixed length
+  - used for small or simple exercises
+

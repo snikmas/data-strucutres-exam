@@ -28,3 +28,4 @@ Status ListDelete(LinkList L, int i, ElemType *e)
 Status PriorElem(LinkList L, ElemType cur_e, ElemType *pre_e)
 Status NextElem(LinkList L, ElemType cur_e, ElemType *next_e)
 void ListTraverse(LinkList L, void (*visit)(ElemType))
+

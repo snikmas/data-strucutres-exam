@@ -21,6 +21,7 @@ Status InitList(LinkList *L) {
 
 // 2. 销毁链表
 Status DestroyList(LinkList *L) {
+        // *L IS A POINTER, NOT IS A NODE
     LinkList p;
     while (*L) {
         p = *L;
